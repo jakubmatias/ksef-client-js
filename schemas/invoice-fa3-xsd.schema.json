@@ -1,0 +1,294 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ksef-client-js.local/schema/invoice-fa3-xsd.schema.json",
+  "title": "KSeF FA(3) Invoice JSON (XSD aligned)",
+  "description": "JSON input aligned with the FA(3) XSD element names.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["Faktura"],
+  "properties": {
+    "Faktura": {
+      "$ref": "#/$defs/Faktura"
+    }
+  },
+  "$defs": {
+    "Faktura": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["Naglowek", "Podmiot1", "Podmiot2", "Fa"],
+      "properties": {
+        "Naglowek": {
+          "$ref": "#/$defs/Naglowek"
+        },
+        "Podmiot1": {
+          "$ref": "#/$defs/Podmiot1"
+        },
+        "Podmiot2": {
+          "$ref": "#/$defs/Podmiot2"
+        },
+        "Podmiot3": {
+          "anyOf": [
+            { "$ref": "#/$defs/Podmiot3" },
+            {
+              "type": "array",
+              "items": { "$ref": "#/$defs/Podmiot3" },
+              "minItems": 1
+            }
+          ]
+        },
+        "Fa": {
+          "$ref": "#/$defs/Fa"
+        },
+        "Stopka": {
+          "$ref": "#/$defs/Stopka"
+        }
+      }
+    },
+    "Naglowek": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["WariantFormularza", "DataWytworzeniaFa"],
+      "properties": {
+        "KodFormularza": {
+          "type": "string",
+          "description": "Kod formularza (FA). Attributes are provided by the XML builder."
+        },
+        "WariantFormularza": {
+          "type": ["string", "number"]
+        },
+        "DataWytworzeniaFa": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "SystemInfo": {
+          "type": "string"
+        }
+      }
+    },
+    "Podmiot1": {
+      "$ref": "#/$defs/PodmiotBase"
+    },
+    "Podmiot2": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["DaneIdentyfikacyjne", "Adres", "JST", "GV"],
+      "properties": {
+        "PrefiksPodatnika": { "type": "string" },
+        "NrEORI": { "type": "string" },
+        "DaneIdentyfikacyjne": { "$ref": "#/$defs/PodmiotId" },
+        "Adres": { "$ref": "#/$defs/Adres" },
+        "AdresKoresp": { "$ref": "#/$defs/Adres" },
+        "DaneKontaktowe": { "$ref": "#/$defs/DaneKontaktowe" },
+        "StatusInfoPodatnika": { "type": "string" },
+        "NrKlienta": { "type": "string" },
+        "IDNabywcy": { "type": "string" },
+        "JST": { "$ref": "#/$defs/BinaryFlag" },
+        "GV": { "$ref": "#/$defs/BinaryFlag" }
+      }
+    },
+    "Podmiot3": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["DaneIdentyfikacyjne"],
+      "properties": {
+        "IDNabywcy": { "type": "string" },
+        "NrEORI": { "type": "string" },
+        "DaneIdentyfikacyjne": { "$ref": "#/$defs/PodmiotId" },
+        "Adres": { "$ref": "#/$defs/Adres" },
+        "AdresKoresp": { "$ref": "#/$defs/Adres" },
+        "DaneKontaktowe": { "$ref": "#/$defs/DaneKontaktowe" },
+        "Rola": { "type": ["string", "number"] },
+        "RolaInna": { "type": ["string", "number"] },
+        "OpisRoli": { "type": "string" },
+        "Udzial": { "type": ["string", "number"] },
+        "NrKlienta": { "type": "string" }
+      }
+    },
+    "PodmiotBase": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["DaneIdentyfikacyjne", "Adres"],
+      "properties": {
+        "PrefiksPodatnika": { "type": "string" },
+        "NrEORI": { "type": "string" },
+        "DaneIdentyfikacyjne": { "$ref": "#/$defs/PodmiotId" },
+        "Adres": { "$ref": "#/$defs/Adres" },
+        "AdresKoresp": { "$ref": "#/$defs/Adres" },
+        "DaneKontaktowe": { "$ref": "#/$defs/DaneKontaktowe" },
+        "StatusInfoPodatnika": { "type": "string" }
+      }
+    },
+    "PodmiotId": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["NIP", "Nazwa"],
+      "properties": {
+        "NIP": {
+          "type": "string",
+          "pattern": "^[0-9]{10}$"
+        },
+        "Nazwa": {
+          "type": "string"
+        }
+      }
+    },
+    "Adres": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["KodKraju", "AdresL1"],
+      "properties": {
+        "KodKraju": { "type": "string" },
+        "AdresL1": { "type": "string" },
+        "AdresL2": { "type": "string" },
+        "GLN": { "type": "string" }
+      }
+    },
+    "DaneKontaktowe": {
+      "anyOf": [
+        { "$ref": "#/$defs/DaneKontaktoweItem" },
+        {
+          "type": "array",
+          "items": { "$ref": "#/$defs/DaneKontaktoweItem" },
+          "minItems": 1
+        }
+      ]
+    },
+    "DaneKontaktoweItem": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "Email": { "type": "string", "format": "email" },
+        "Telefon": { "type": "string" }
+      }
+    },
+    "Fa": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["KodWaluty", "P_1", "P_2", "P_15", "Adnotacje", "RodzajFaktury", "FaWiersz"],
+      "properties": {
+        "KodWaluty": { "type": "string" },
+        "P_1": { "type": "string", "format": "date" },
+        "P_1M": { "type": "string" },
+        "P_2": { "type": "string" },
+        "P_6": { "type": "string", "format": "date" },
+        "P_13_7": { "type": ["string", "number"] },
+        "P_15": { "type": ["string", "number"] },
+        "Adnotacje": { "$ref": "#/$defs/Adnotacje" },
+        "RodzajFaktury": { "type": "string" },
+        "FaWiersz": {
+          "anyOf": [
+            { "$ref": "#/$defs/FaWiersz" },
+            {
+              "type": "array",
+              "items": { "$ref": "#/$defs/FaWiersz" },
+              "minItems": 1
+            }
+          ]
+        },
+        "Platnosc": { "$ref": "#/$defs/Platnosc" }
+      }
+    },
+    "Adnotacje": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["P_16", "P_17", "P_18", "P_18A", "P_23", "PMarzy"],
+      "properties": {
+        "P_16": { "type": ["string", "number"] },
+        "P_17": { "type": ["string", "number"] },
+        "P_18": { "type": ["string", "number"] },
+        "P_18A": { "type": ["string", "number"] },
+        "Zwolnienie": { "$ref": "#/$defs/Zwolnienie" },
+        "NoweSrodkiTransportu": { "$ref": "#/$defs/NoweSrodkiTransportu" },
+        "P_23": { "type": ["string", "number"] },
+        "PMarzy": { "$ref": "#/$defs/PMarzy" }
+      }
+    },
+    "Zwolnienie": {
+      "type": "object",
+      "additionalProperties": true,
+      "anyOf": [
+        { "required": ["P_19"] },
+        { "required": ["P_19N"] }
+      ],
+      "properties": {
+        "P_19": { "type": ["string", "number"] },
+        "P_19A": { "type": "string" },
+        "P_19B": { "type": "string" },
+        "P_19C": { "type": "string" },
+        "P_19N": { "type": ["string", "number"] }
+      }
+    },
+    "NoweSrodkiTransportu": {
+      "type": "object",
+      "additionalProperties": true,
+      "anyOf": [
+        { "required": ["P_22"] },
+        { "required": ["P_22N"] }
+      ],
+      "properties": {
+        "P_22": { "type": ["string", "number"] },
+        "P_22N": { "type": ["string", "number"] }
+      }
+    },
+    "PMarzy": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "P_PMarzy": { "type": ["string", "number"] },
+        "P_PMarzyN": { "type": ["string", "number"] }
+      }
+    },
+    "FaWiersz": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["NrWierszaFa"],
+      "properties": {
+        "NrWierszaFa": { "type": ["string", "number"] },
+        "UU_ID": { "type": "string" },
+        "P_7": { "type": "string" },
+        "P_8A": { "type": "string" },
+        "P_8B": { "type": ["string", "number"] },
+        "P_9A": { "type": ["string", "number"] },
+        "P_11": { "type": ["string", "number"] },
+        "P_12": { "type": ["string", "number"] }
+      }
+    },
+    "Platnosc": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "Zaplacono": { "type": ["string", "number"] },
+        "DataZaplaty": { "type": "string", "format": "date" }
+      }
+    },
+    "Stopka": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "Informacje": {
+          "anyOf": [
+            { "$ref": "#/$defs/StopkaInformacje" },
+            {
+              "type": "array",
+              "items": { "$ref": "#/$defs/StopkaInformacje" },
+              "minItems": 1
+            }
+          ]
+        }
+      }
+    },
+    "StopkaInformacje": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "StopkaFaktury": { "type": "string" }
+      }
+    },
+    "BinaryFlag": {
+      "anyOf": [
+        { "type": "string", "enum": ["1", "2"] },
+        { "type": "integer", "enum": [1, 2] }
+      ]
+    }
+  }
+}

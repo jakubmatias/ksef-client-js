@@ -1,0 +1,194 @@
+{
+  "invoices": [
+    {
+      "Faktura": {
+        "Naglowek": {
+          "KodFormularza": "FA",
+          "WariantFormularza": "3",
+          "DataWytworzeniaFa": "2026-01-14T10:01:00Z",
+          "SystemInfo": "ksef-client-js"
+        },
+        "Podmiot1": {
+          "DaneIdentyfikacyjne": {
+            "NIP": "7431952631",
+            "Nazwa": "Test Seller Sp z o o"
+          },
+          "Adres": {
+            "KodKraju": "PL",
+            "AdresL1": "Test Street 1",
+            "AdresL2": "00-001 Warsaw"
+          },
+          "DaneKontaktowe": {
+            "Email": "seller@example.com",
+            "Telefon": "111-222-333"
+          }
+        },
+        "Podmiot2": {
+          "DaneIdentyfikacyjne": {
+            "NIP": "6888785549",
+            "Nazwa": "Test Buyer Sp z o o"
+          },
+          "Adres": {
+            "KodKraju": "PL",
+            "AdresL1": "Buyer Street 2",
+            "AdresL2": "30-001 Krakow"
+          },
+          "DaneKontaktowe": {
+            "Email": "buyer@example.com",
+            "Telefon": "444-555-666"
+          },
+          "NrKlienta": "CL-1001",
+          "JST": "1",
+          "GV": "2"
+        },
+        "Podmiot3": {
+          "DaneIdentyfikacyjne": {
+            "NIP": "8927345566",
+            "Nazwa": "JST Subordinate Unit"
+          },
+          "Adres": {
+            "KodKraju": "PL",
+            "AdresL1": "JST Unit Street 10",
+            "AdresL2": "00-950 Warsaw"
+          },
+          "DaneKontaktowe": {
+            "Email": "jst-unit@example.com",
+            "Telefon": "222-333-444"
+          },
+          "Rola": 8
+        },
+        "Fa": {
+          "KodWaluty": "PLN",
+          "P_1": "2026-01-14",
+          "P_1M": "Warsaw",
+          "P_2": "FA/TEST-JST-0006/01/2026",
+          "P_6": "2026-01-14",
+          "P_15": 123,
+          "Adnotacje": {
+            "P_16": "2",
+            "P_17": "2",
+            "P_18": "2",
+            "P_18A": "2",
+            "Zwolnienie": {
+              "P_19N": "1"
+            },
+            "NoweSrodkiTransportu": {
+              "P_22N": "1"
+            },
+            "P_23": "2",
+            "PMarzy": {
+              "P_PMarzyN": "1"
+            }
+          },
+          "RodzajFaktury": "VAT",
+          "FaWiersz": [
+            {
+              "NrWierszaFa": 1,
+              "P_7": "Test Product",
+              "P_8A": "szt.",
+              "P_8B": 1,
+              "P_9A": 100,
+              "P_11": 100,
+              "P_12": 23
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Faktura": {
+        "Naglowek": {
+          "KodFormularza": "FA",
+          "WariantFormularza": "3",
+          "DataWytworzeniaFa": "2026-01-14T10:02:00Z",
+          "SystemInfo": "ksef-client-js"
+        },
+        "Podmiot1": {
+          "DaneIdentyfikacyjne": {
+            "NIP": "7431952631",
+            "Nazwa": "Test Seller Sp z o o"
+          },
+          "Adres": {
+            "KodKraju": "PL",
+            "AdresL1": "Test Street 1",
+            "AdresL2": "00-001 Warsaw"
+          },
+          "DaneKontaktowe": {
+            "Email": "seller@example.com",
+            "Telefon": "111-222-333"
+          }
+        },
+        "Podmiot2": {
+          "DaneIdentyfikacyjne": {
+            "NIP": "6888785549",
+            "Nazwa": "Test Buyer Sp z o o"
+          },
+          "Adres": {
+            "KodKraju": "PL",
+            "AdresL1": "Buyer Street 2",
+            "AdresL2": "30-001 Krakow"
+          },
+          "DaneKontaktowe": {
+            "Email": "buyer@example.com",
+            "Telefon": "444-555-666"
+          },
+          "NrKlienta": "CL-1002",
+          "JST": "2",
+          "GV": "1"
+        },
+        "Podmiot3": {
+          "DaneIdentyfikacyjne": {
+            "NIP": "7788123312",
+            "Nazwa": "VAT Group Member"
+          },
+          "Adres": {
+            "KodKraju": "PL",
+            "AdresL1": "GV Member Street 5",
+            "AdresL2": "30-200 Krakow"
+          },
+          "DaneKontaktowe": {
+            "Email": "gv-member@example.com",
+            "Telefon": "333-444-555"
+          },
+          "Rola": 10
+        },
+        "Fa": {
+          "KodWaluty": "PLN",
+          "P_1": "2026-01-14",
+          "P_1M": "Krakow",
+          "P_2": "FA/TEST-GV-0007/01/2026",
+          "P_6": "2026-01-14",
+          "P_15": 369,
+          "Adnotacje": {
+            "P_16": "2",
+            "P_17": "2",
+            "P_18": "2",
+            "P_18A": "2",
+            "Zwolnienie": {
+              "P_19N": "1"
+            },
+            "NoweSrodkiTransportu": {
+              "P_22N": "1"
+            },
+            "P_23": "2",
+            "PMarzy": {
+              "P_PMarzyN": "1"
+            }
+          },
+          "RodzajFaktury": "VAT",
+          "FaWiersz": [
+            {
+              "NrWierszaFa": 1,
+              "P_7": "Test Service",
+              "P_8A": "szt.",
+              "P_8B": 2,
+              "P_9A": 150,
+              "P_11": 300,
+              "P_12": 23
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

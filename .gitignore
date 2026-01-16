@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.env
+ksef-api-test.crt
+ksef-api-test.key
+ksef-auth-signed.xml
+.pnpm-store/
+.ksef.json
+./ksef
+bin/
+ksef-invoice-upo-*.xml
+ksef-session-upo-*.xml
+.DS_Store

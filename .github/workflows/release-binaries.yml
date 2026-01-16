@@ -1,0 +1,54 @@
+name: Release CLI Binaries
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "latest"
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build library
+        run: pnpm build
+
+      - name: Build CLI binaries
+        run: pnpm build:cli
+
+      - name: Package binaries
+        run: |
+          cd bin
+          zip -9 ksef-linux.zip ksef-linux
+          zip -9 ksef-macos.zip ksef-macos
+          zip -9 ksef-windows.zip ksef-windows.exe
+
+      - name: Generate checksums
+        run: |
+          cd bin
+          sha256sum ksef-linux.zip ksef-macos.zip ksef-windows.zip > checksums.sha256
+
+      - name: Upload release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            bin/ksef-linux.zip
+            bin/ksef-macos.zip
+            bin/ksef-windows.zip
+            bin/checksums.sha256

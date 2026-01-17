@@ -1,6 +1,6 @@
 {
   "name": "ksef-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TypeScript Client library and CLI tool for Poland's KSEF e-invoicing system",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

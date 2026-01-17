@@ -71,11 +71,31 @@ const client = KsefClient.forEnvironment('test')
 
 // Or with custom configuration
 const client = KsefClient.create({
-  baseURL: 'https://ksef-test.mf.gov.pl/api',
+  baseURL: 'https://api-test.ksef.mf.gov.pl',
   timeout: 30000,
   retries: 3,
 })
 ```
+
+### Environments and Base URLs
+
+Środowisko testowe (TE)
+
+- https://api-test.ksef.mf.gov.pl
+- https://qr-test.ksef.mf.gov.pl
+- https://ap-test.ksef.mf.gov.pl
+
+Środowisko demonstracyjne / przedprodukcyjne (TR)
+
+- https://api-demo.ksef.mf.gov.pl
+- https://qr-demo.ksef.mf.gov.pl
+- https://ap-demo.ksef.mf.gov.pl
+
+Środowisko produkcyjne (PRD)
+
+- https://api.ksef.mf.gov.pl
+- https://qr.ksef.mf.gov.pl
+- https://ap.ksef.mf.gov.pl
 
 ### Authentication
 

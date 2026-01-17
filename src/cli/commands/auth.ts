@@ -3,6 +3,7 @@ import fs from 'fs'
 import { CliContext, CommandResult } from '../types'
 import { KsefClient, AuthConfig, AuthConfigBuilder, CertificateFormat, DefaultCertificateGenerator, CertificateGenerationOptions } from '@/index'
 import { DefaultConfigManager } from '@/config/config-manager'
+import { getKsefBaseUrl, KsefEnvironment } from '@/config/environment'
 import { attachAccessToken, refreshAccessTokenIfNeeded } from '../auth-utils'
 
 export function createAuthCommand(context: CliContext): Command {
@@ -491,14 +492,12 @@ async function handleAuthLogout(context: CliContext): Promise<CommandResult> {
 }
 
 async function createKsefClient(context: CliContext): Promise<KsefClient> {
-  const baseURL = context.config.baseURL ??
-    (context.config.environment === 'production'
-      ? 'https://ksef.mf.gov.pl/api'
-      : 'https://ksef-test.mf.gov.pl/api')
+  const environment = (context.config.environment ?? 'test') as KsefEnvironment
+  const baseURL = context.config.baseURL ?? getKsefBaseUrl(environment)
 
   const client = KsefClient.create({
     baseURL,
-    environment: context.config.environment ?? 'test',
+    environment,
     ...(context.config.timeout && { timeout: context.config.timeout }),
   })
 

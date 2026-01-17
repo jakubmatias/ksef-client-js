@@ -1,6 +1,7 @@
 import { CliContext } from './types'
 import { KsefClient } from '@/index'
 import { DefaultConfigManager } from '@/config/config-manager'
+import { getKsefBaseUrl, KsefEnvironment } from '@/config/environment'
 
 const REFRESH_SKEW_MS = 60 * 1000
 
@@ -103,10 +104,8 @@ function deriveRequestPath(context: CliContext, responseUrl?: string): string | 
     return null
   }
 
-  const baseURL = context.config.baseURL ??
-    (context.config.environment === 'production'
-      ? 'https://ksef.mf.gov.pl/api'
-      : 'https://ksef-test.mf.gov.pl/api')
+  const environment = (context.config.environment ?? 'test') as KsefEnvironment
+  const baseURL = context.config.baseURL ?? getKsefBaseUrl(environment)
 
   if (!responseUrl.startsWith(baseURL)) {
     return null

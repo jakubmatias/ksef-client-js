@@ -5,7 +5,7 @@ import fsp from 'fs/promises'
 
 // Configuration file schema
 export const ConfigFileSchema = z.object({
-  environment: z.enum(['test', 'production']).optional(),
+  environment: z.enum(['test', 'demo', 'production']).optional(),
   baseURL: z.string().url().optional(),
   certificatePath: z.string().optional(),
   certificatePassword: z.string().optional(),

@@ -8,7 +8,7 @@ import { config as loadEnv } from 'dotenv'
 loadEnv({ path: path.resolve(process.cwd(), '.env') })
 
 export interface IntegrationTestEnvironmentConfig {
-  mode: 'mock' | 'test' | 'production'
+  mode: 'mock' | 'test' | 'demo' | 'production'
   baseURL?: string
   timeout: number
   retries: number
@@ -29,7 +29,7 @@ export interface IntegrationTestEnvironmentConfig {
  * Get integration test configuration from environment variables
  */
 export function getIntegrationTestConfig(): IntegrationTestEnvironmentConfig {
-  const mode = (process.env['KSEF_TEST_MODE'] as 'mock' | 'test' | 'production') || 'mock'
+  const mode = (process.env['KSEF_TEST_MODE'] as 'mock' | 'test' | 'demo' | 'production') || 'mock'
 
   const config: IntegrationTestEnvironmentConfig = {
     mode,
@@ -49,10 +49,13 @@ export function getIntegrationTestConfig(): IntegrationTestEnvironmentConfig {
       // Will be set dynamically when mock server starts
       break
     case 'test':
-      config.baseURL = process.env['KSEF_TEST_BASE_URL'] || 'https://ksef-test.mf.gov.pl/api'
+      config.baseURL = process.env['KSEF_TEST_BASE_URL'] || 'https://api-test.ksef.mf.gov.pl'
+      break
+    case 'demo':
+      config.baseURL = process.env['KSEF_DEMO_BASE_URL'] || 'https://api-demo.ksef.mf.gov.pl'
       break
     case 'production':
-      config.baseURL = process.env['KSEF_PROD_BASE_URL'] || 'https://ksef.mf.gov.pl/api'
+      config.baseURL = process.env['KSEF_PROD_BASE_URL'] || 'https://api.ksef.mf.gov.pl'
       break
   }
 
@@ -88,7 +91,7 @@ export function validateRealServiceConfig(config: IntegrationTestEnvironmentConf
   const missing: string[] = []
 
   if (!config.baseURL) {
-    missing.push('KSEF_TEST_BASE_URL or KSEF_PROD_BASE_URL')
+    missing.push('KSEF_TEST_BASE_URL or KSEF_DEMO_BASE_URL or KSEF_PROD_BASE_URL')
   }
 
   const hasPem = Boolean(config.realService?.certificatePemPath && config.realService?.privateKeyPath)

@@ -73,11 +73,12 @@ import { DefaultHttpClient } from './http/http-client'
 import { DefaultAuthenticator } from './auth/authenticator'
 import { DefaultSessionManager } from './session/session-manager'
 import { DefaultInvoiceService } from './invoice/invoice-service'
+import { getKsefBaseUrl, KsefEnvironment } from './config/environment'
 
 // Main KSEF Client
 export interface KsefClientConfig {
   baseURL: string
-  environment?: 'test' | 'production'
+  environment?: KsefEnvironment
   timeout?: number
   retries?: number
   rateLimit?: number
@@ -108,11 +109,8 @@ export class KsefClient {
     return new KsefClient(config)
   }
 
-  public static forEnvironment(environment: 'test' | 'production'): KsefClient {
-    const baseURL = environment === 'production'
-      ? 'https://ksef.mf.gov.pl/api'
-      : 'https://ksef-test.mf.gov.pl/api'
-
+  public static forEnvironment(environment: KsefEnvironment): KsefClient {
+    const baseURL = getKsefBaseUrl(environment)
     return new KsefClient({ baseURL, environment })
   }
 }

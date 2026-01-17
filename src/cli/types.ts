@@ -1,6 +1,6 @@
 export interface CliConfig {
   baseURL?: string | undefined
-  environment?: 'test' | 'production' | undefined
+  environment?: 'test' | 'demo' | 'production' | undefined
   certificatePath?: string | undefined
   certificatePassword?: string | undefined
   configFile?: string | undefined

@@ -18,7 +18,7 @@ async function main(): Promise<void> {
   // Global options
   program
     .option('-C, --config <path>', 'Configuration file path')
-    .option('-e, --environment <env>', 'Environment (test|production)', 'test')
+    .option('-e, --environment <env>', 'Environment (test|demo|production)', 'test')
     .option('--base-url <url>', 'Custom base URL')
     .option('--certificate <path>', 'Certificate file path')
     .option('--certificate-password <password>', 'Certificate password')

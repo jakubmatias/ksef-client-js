@@ -1,6 +1,6 @@
 # Integration Tests
 
-This directory contains integration tests for the KSEF client. The tests can run in three modes:
+This directory contains integration tests for the KSEF client. The tests can run in four modes:
 
 ## Test Modes
 
@@ -16,7 +16,7 @@ KSEF_TEST_MODE=mock bun test tests/integration/
 ```
 
 ### 2. Test Environment
-Tests run against the real KSEF test environment (`https://ksef-test.mf.gov.pl/api`).
+Tests run against the real KSEF test environment (`https://api-test.ksef.mf.gov.pl`).
 
 ```bash
 # Required environment variables
@@ -35,15 +35,31 @@ export KSEF_TEST_RETRIES=3             # Number of retries (default: 3)
 bun test tests/integration/
 ```
 
-### 3. Production Environment
-Tests run against the real KSEF production environment (`https://ksef.mf.gov.pl/api`).
+### 3. Demo Environment
+Tests run against the real KSEF demo environment (`https://api-demo.ksef.mf.gov.pl`).
+
+```bash
+# Required environment variables
+export KSEF_TEST_MODE=demo
+export KSEF_DEMO_BASE_URL=https://api-demo.ksef.mf.gov.pl
+export KSEF_CERT_PEM_PATH=/path/to/your/demo-certificate.pem
+export KSEF_KEY_PEM_PATH=/path/to/your/private-key.pem
+export KSEF_KEY_PASSPHRASE=your_key_passphrase
+export KSEF_NIP=your_demo_nip
+
+# Run tests
+bun test tests/integration/
+```
+
+### 4. Production Environment
+Tests run against the real KSEF production environment (`https://api.ksef.mf.gov.pl`).
 
 ⚠️ **WARNING**: Only use this with valid production certificates and in controlled environments.
 
 ```bash
 # Required environment variables
 export KSEF_TEST_MODE=production
-export KSEF_PROD_BASE_URL=https://ksef.mf.gov.pl/api
+export KSEF_PROD_BASE_URL=https://api.ksef.mf.gov.pl
 export KSEF_CERT_PEM_PATH=/path/to/your/prod-certificate.pem
 export KSEF_KEY_PEM_PATH=/path/to/your/private-key.pem
 export KSEF_KEY_PASSPHRASE=your_key_passphrase
@@ -57,9 +73,10 @@ bun test tests/integration/
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `KSEF_TEST_MODE` | No | `mock` | Test mode: `mock`, `test`, or `production` |
-| `KSEF_TEST_BASE_URL` | For test mode | `https://ksef-test.mf.gov.pl/api` | KSEF test environment URL |
-| `KSEF_PROD_BASE_URL` | For production mode | `https://ksef.mf.gov.pl/api` | KSEF production environment URL |
+| `KSEF_TEST_MODE` | No | `mock` | Test mode: `mock`, `test`, `demo`, or `production` |
+| `KSEF_TEST_BASE_URL` | For test mode | `https://api-test.ksef.mf.gov.pl` | KSEF test environment URL |
+| `KSEF_DEMO_BASE_URL` | For demo mode | `https://api-demo.ksef.mf.gov.pl` | KSEF demo environment URL |
+| `KSEF_PROD_BASE_URL` | For production mode | `https://api.ksef.mf.gov.pl` | KSEF production environment URL |
 | `KSEF_CERT_PEM_PATH` | For real services | - | Path to PEM certificate file |
 | `KSEF_KEY_PEM_PATH` | For real services | - | Path to PEM private key file |
 | `KSEF_KEY_PASSPHRASE` | For encrypted keys | - | Private key passphrase |
@@ -192,7 +209,7 @@ The test framework will log the configuration being used:
 ```
 🧪 Integration Test Configuration:
    Mode: test
-   Base URL: https://ksef-test.mf.gov.pl/api
+   Base URL: https://api-test.ksef.mf.gov.pl
    Timeout: 30000ms
    Retries: 3
    Certificate PEM: ✅ Configured

@@ -11,7 +11,7 @@ import {
 } from 'ksef-client'
 
 async function main(): Promise<void> {
-  const baseURL = process.env['KSEF_BASE_URL'] || 'https://ksef-test.mf.gov.pl/api'
+  const baseURL = process.env['KSEF_BASE_URL'] || 'https://api-test.ksef.mf.gov.pl'
   const nip = process.env['KSEF_NIP']
   const certPem = process.env['KSEF_CERT_PEM']
   const keyPem = process.env['KSEF_KEY_PEM']

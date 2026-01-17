@@ -6,7 +6,7 @@ import { getIntegrationTestConfig, validateRealServiceConfig, logTestConfig, Int
 
 export interface IntegrationTestConfig {
   baseURL: string
-  environment: 'test' | 'production'
+  environment: 'test' | 'demo' | 'production'
   timeout: number
   retries: number
   enableMocking: boolean
@@ -34,7 +34,7 @@ export abstract class BaseIntegrationTest {
 
   constructor(config: Partial<IntegrationTestConfig> = {}) {
     this.config = {
-      baseURL: 'https://ksef-test.mf.gov.pl/api',
+      baseURL: 'https://api-test.ksef.mf.gov.pl',
       environment: 'test',
       timeout: 30000,
       retries: 3,
@@ -63,7 +63,11 @@ export abstract class BaseIntegrationTest {
     }
 
     const config: Partial<IntegrationTestConfig> = {
-      environment: envConfig.mode === 'production' ? 'production' : 'test',
+      environment: envConfig.mode === 'production'
+        ? 'production'
+        : envConfig.mode === 'demo'
+          ? 'demo'
+          : 'test',
       timeout: envConfig.timeout,
       retries: envConfig.retries,
       enableMocking: envConfig.mode === 'mock',

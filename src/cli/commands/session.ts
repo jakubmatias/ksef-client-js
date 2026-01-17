@@ -4,6 +4,7 @@ import { CliContext, CommandResult } from '../types'
 import { KsefClient, SessionBuilder } from '@/index'
 import { createEncryptionData } from '@/crypto/ksef-crypto'
 import { DefaultConfigManager } from '@/config/config-manager'
+import { getKsefBaseUrl, KsefEnvironment } from '@/config/environment'
 import { attachAccessToken, refreshAccessTokenIfNeeded } from '../auth-utils'
 
 export function createSessionCommand(context: CliContext): Command {
@@ -530,14 +531,12 @@ async function handleSessionInvoiceStatus(
 }
 
 async function createKsefClient(context: CliContext): Promise<KsefClient> {
-  const baseURL = context.config.baseURL ??
-    (context.config.environment === 'production'
-      ? 'https://ksef.mf.gov.pl/api'
-      : 'https://ksef-test.mf.gov.pl/api')
+  const environment = (context.config.environment ?? 'test') as KsefEnvironment
+  const baseURL = context.config.baseURL ?? getKsefBaseUrl(environment)
 
   const client = KsefClient.create({
     baseURL,
-    environment: context.config.environment ?? 'test',
+    environment,
     ...(context.config.timeout && { timeout: context.config.timeout }),
   })
 

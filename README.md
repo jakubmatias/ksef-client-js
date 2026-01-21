@@ -38,7 +38,8 @@ Install script disclaimer: these scripts download binaries and place them on you
 
 ```bash
 # Library installation
-npm install ksef-client
+npm install github:jakubmatias/ksef-client-js
+# No plans to publish to npm for now
 
 # Import schemas (optional)
 # Node with JSON imports enabled:
@@ -196,9 +197,18 @@ const xsdInvoiceXml = Fa3XsdInvoiceBuilder.create()
     P_1: '2026-01-14',
     P_2: `FA/EXAMPLE-${Date.now()}`,
     P_15: 100,
-    Adnotacje: { P_16: '2', P_17: '2', P_18: '2', P_18A: '2', P_23: '2', PMarzy: { P_PMarzyN: '1' } },
+    Adnotacje: {
+      P_16: '2',
+      P_17: '2',
+      P_18: '2',
+      P_18A: '2',
+      P_23: '2',
+      PMarzy: { P_PMarzyN: '1' },
+    },
     RodzajFaktury: 'VAT',
-    FaWiersz: [{ NrWierszaFa: 1, P_7: 'Service', P_8A: 'szt.', P_8B: 1, P_9A: 100, P_11: 100, P_12: 23 }],
+    FaWiersz: [
+      { NrWierszaFa: 1, P_7: 'Service', P_8A: 'szt.', P_8B: 1, P_9A: 100, P_11: 100, P_12: 23 },
+    ],
   })
   .buildXml()
 ```

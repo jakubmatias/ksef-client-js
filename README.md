@@ -80,19 +80,19 @@ const client = KsefClient.create({
 
 ### Environments and Base URLs
 
-Środowisko testowe (TE)
+Test Environment - Środowisko testowe (TE)
 
 - https://api-test.ksef.mf.gov.pl
 - https://qr-test.ksef.mf.gov.pl
 - https://ap-test.ksef.mf.gov.pl
 
-Środowisko demonstracyjne / przedprodukcyjne (TR)
+Demo environment - Środowisko demonstracyjne / przedprodukcyjne (TR)
 
 - https://api-demo.ksef.mf.gov.pl
 - https://qr-demo.ksef.mf.gov.pl
 - https://ap-demo.ksef.mf.gov.pl
 
-Środowisko produkcyjne (PRD)
+Production Environment - Środowisko produkcyjne (PRD)
 
 - https://api.ksef.mf.gov.pl
 - https://qr.ksef.mf.gov.pl

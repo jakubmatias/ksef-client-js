@@ -1,10 +1,12 @@
 import { Command } from 'commander'
 import fs from 'fs'
 import { CliContext, CommandResult } from '../types'
-import { KsefClient, AuthConfig, AuthConfigBuilder, CertificateFormat, DefaultCertificateGenerator, CertificateGenerationOptions } from '@/index'
+import { KsefClient, AuthConfigBuilder, CertificateFormat, DefaultCertificateGenerator, CertificateGenerationOptions } from '@/index'
+import type { AuthConfig } from '@/types/auth'
 import { DefaultConfigManager } from '@/config/config-manager'
 import { getKsefBaseUrl, KsefEnvironment } from '@/config/environment'
 import { attachAccessToken, refreshAccessTokenIfNeeded } from '../auth-utils'
+import { formatAuthCliError } from '../auth-error-format'
 
 export function createAuthCommand(context: CliContext): Command {
   const cmd = new Command('auth')
@@ -155,7 +157,7 @@ async function handleAuthTest(
     context.logger.error('Authentication test failed')
     return {
       success: false,
-      error: error instanceof Error ? error.message : String(error),
+      error: formatAuthCliError(error),
     }
   }
 }
@@ -207,7 +209,7 @@ async function handleAuthLogin(
     context.logger.error('Authentication login failed')
     return {
       success: false,
-      error: error instanceof Error ? error.message : String(error),
+      error: formatAuthCliError(error),
     }
   }
 }

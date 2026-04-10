@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import { Command } from 'commander'
 import { CliContext } from './cli/types'
 import { CliLogger } from './cli/logger'

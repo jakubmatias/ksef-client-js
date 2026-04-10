@@ -41,6 +41,13 @@ Install script disclaimer: these scripts download binaries and place them on you
 npm install github:jakubmatias/ksef-client-js
 # No plans to publish to npm for now
 
+# Run the bundled CLI from your project
+npx ksef --help
+# or
+pnpm exec ksef --help
+# or
+./node_modules/.bin/ksef --help
+
 # Import schemas (optional)
 # Node with JSON imports enabled:
 # import fa3Schema from 'ksef-client/schemas/invoice-fa3.schema.json'

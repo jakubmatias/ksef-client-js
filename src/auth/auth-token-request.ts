@@ -10,6 +10,11 @@ interface AuthTokenRequestParams {
 export const AUTH_TOKEN_XML_NAMESPACE = 'http://ksef.mf.gov.pl/auth/token/2.0'
 
 export function buildAuthTokenRequestXml(params: AuthTokenRequestParams): string {
+  assertNonEmptyString('challenge', params.challenge)
+  assertNonEmptyString('contextIdentifier.type', params.contextIdentifier?.type)
+  assertNonEmptyString('contextIdentifier.value', params.contextIdentifier?.value)
+  assertNonEmptyString('subjectIdentifierType', params.subjectIdentifierType)
+
   const contextElement = buildContextIdentifier(params.contextIdentifier)
   const ipPolicy = params.ipAddressPolicy ? buildIpAddressPolicy(params.ipAddressPolicy) : ''
 
@@ -40,6 +45,8 @@ function buildContextIdentifier(context: ContextIdentifier): string {
 }
 
 function buildIpAddressPolicy(policy: IpAddressPolicy): string {
+  assertNonEmptyString('ipAddressPolicy.onClientIpChange', policy.onClientIpChange)
+
   const allowedIps = policy.allowedIps
   const ipElements: string[] = []
 
@@ -70,4 +77,10 @@ function escapeXml(value: string): string {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;')
+}
+
+function assertNonEmptyString(fieldName: string, value: unknown): asserts value is string {
+  if (typeof value !== 'string' || value.length === 0) {
+    throw new Error(`Missing required auth token field: ${fieldName}`)
+  }
 }

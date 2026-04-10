@@ -1,6 +1,7 @@
 import {
   AuthConfig,
   AuthChallenge,
+  AuthChallengeSchema,
   AccessTokenResponse,
   AuthResult,
   AuthenticationError,
@@ -66,7 +67,7 @@ export class DefaultAuthenticator implements Authenticator {
       throw new AuthenticationError(
         'Authentication failed',
         'AUTH_FAILED',
-        error instanceof Error ? error.message : String(error)
+        this.getErrorDetails(error)
       )
     }
   }
@@ -92,7 +93,7 @@ export class DefaultAuthenticator implements Authenticator {
       throw new AuthenticationError(
         'Token refresh failed',
         'REFRESH_FAILED',
-        error instanceof Error ? error.message : String(error)
+        this.getErrorDetails(error)
       )
     }
   }
@@ -109,7 +110,7 @@ export class DefaultAuthenticator implements Authenticator {
       throw new AuthenticationError(
         'Token revocation failed',
         'REVOKE_FAILED',
-        error instanceof Error ? error.message : String(error)
+        this.getErrorDetails(error)
       )
     }
   }
@@ -164,13 +165,30 @@ export class DefaultAuthenticator implements Authenticator {
         throw new AuthenticationError('Empty challenge response', 'EMPTY_CHALLENGE')
       }
 
-      return response.data
+      const normalizedData = this.normalizeJsonLikeResponse(response.data)
+      const parsed = AuthChallengeSchema.safeParse(normalizedData)
+      if (!parsed.success) {
+        throw new AuthenticationError(
+          'Invalid challenge response',
+          'INVALID_CHALLENGE_RESPONSE',
+          {
+            validation: parsed.error.flatten(),
+            rawResponse: typeof response.data === 'string' ? response.data : response.data,
+            headers: response.headers,
+            url: response.url,
+            status: response.status,
+            statusText: response.statusText,
+          }
+        )
+      }
+
+      return parsed.data
     } catch (error) {
       this.logAuthDebug('getAuthChallengeV2', error)
       throw new AuthenticationError(
         'Failed to get authentication challenge',
         'CHALLENGE_FAILED',
-        error instanceof Error ? error.message : String(error)
+        this.getErrorDetails(error)
       )
     }
   }
@@ -206,7 +224,7 @@ export class DefaultAuthenticator implements Authenticator {
       throw new AuthenticationError(
         'Failed to sign AuthTokenRequest',
         'SIGN_FAILED',
-        error instanceof Error ? error.message : String(error)
+        this.getErrorDetails(error)
       )
     }
   }
@@ -251,7 +269,7 @@ export class DefaultAuthenticator implements Authenticator {
       throw new AuthenticationError(
         'Token request failed',
         'TOKEN_REQUEST_FAILED',
-        error instanceof Error ? error.message : String(error)
+        this.getErrorDetails(error)
       )
     }
   }
@@ -291,7 +309,7 @@ export class DefaultAuthenticator implements Authenticator {
       throw new AuthenticationError(
         'Status check failed',
         'STATUS_CHECK_FAILED',
-        error instanceof Error ? error.message : String(error)
+        this.getErrorDetails(error)
       )
     }
   }
@@ -325,7 +343,7 @@ export class DefaultAuthenticator implements Authenticator {
       throw new AuthenticationError(
         'Token redeem failed',
         'REDEEM_FAILED',
-        error instanceof Error ? error.message : String(error)
+        this.getErrorDetails(error)
       )
     }
   }
@@ -349,13 +367,30 @@ export class DefaultAuthenticator implements Authenticator {
         throw new AuthenticationError('Empty challenge response', 'EMPTY_CHALLENGE')
       }
 
-      return response.data
+      const normalizedData = this.normalizeJsonLikeResponse(response.data)
+      const parsed = AuthChallengeSchema.safeParse(normalizedData)
+      if (!parsed.success) {
+        throw new AuthenticationError(
+          'Invalid challenge response',
+          'INVALID_CHALLENGE_RESPONSE',
+          {
+            validation: parsed.error.flatten(),
+            rawResponse: typeof response.data === 'string' ? response.data : response.data,
+            headers: response.headers,
+            url: response.url,
+            status: response.status,
+            statusText: response.statusText,
+          }
+        )
+      }
+
+      return parsed.data
     } catch (error) {
       this.logAuthDebug('getAuthChallengeLegacy', error)
       throw new AuthenticationError(
         'Failed to get authentication challenge',
         'CHALLENGE_FAILED',
-        error instanceof Error ? error.message : String(error)
+        this.getErrorDetails(error)
       )
     }
   }
@@ -374,7 +409,7 @@ export class DefaultAuthenticator implements Authenticator {
       throw new AuthenticationError(
         'Failed to sign challenge',
         'SIGN_FAILED',
-        error instanceof Error ? error.message : String(error)
+        this.getErrorDetails(error)
       )
     }
   }
@@ -402,7 +437,7 @@ export class DefaultAuthenticator implements Authenticator {
       throw new AuthenticationError(
         'Token request failed',
         'TOKEN_REQUEST_FAILED',
-        error instanceof Error ? error.message : String(error)
+        this.getErrorDetails(error)
       )
     }
   }
@@ -434,7 +469,7 @@ export class DefaultAuthenticator implements Authenticator {
       throw new AuthenticationError(
         'Status check failed',
         'STATUS_CHECK_FAILED',
-        error instanceof Error ? error.message : String(error)
+        this.getErrorDetails(error)
       )
     }
   }
@@ -455,7 +490,7 @@ export class DefaultAuthenticator implements Authenticator {
       throw new AuthenticationError(
         'Token redemption failed',
         'REDEEM_FAILED',
-        error instanceof Error ? error.message : String(error)
+        this.getErrorDetails(error)
       )
     }
   }
@@ -487,6 +522,57 @@ export class DefaultAuthenticator implements Authenticator {
     }
 
     console.error(`[ksef-auth-debug] ${context}`, error)
+  }
+
+  private getErrorDetails(error: unknown): unknown {
+    if (error instanceof HttpError) {
+      const responseData = error.response?.data as {
+        exception?: { exceptionDetailList?: unknown }
+      } | undefined
+
+      return {
+        message: error.message,
+        status: error.status,
+        statusText: error.statusText,
+        url: error.response?.url,
+        response: error.response?.data,
+        exceptionDetails: responseData?.exception,
+      }
+    }
+
+    if (error instanceof AuthenticationError) {
+      return {
+        code: error.code,
+        details: error.details,
+      }
+    }
+
+    if (error instanceof Error) {
+      return error.message
+    }
+
+    return String(error)
+  }
+
+  private normalizeJsonLikeResponse<T>(data: T): T | unknown {
+    if (typeof data !== 'string') {
+      return data
+    }
+
+    const trimmed = data.trim()
+    if (!trimmed) {
+      return data
+    }
+
+    if ((trimmed.startsWith('{') && trimmed.endsWith('}')) || (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
+      try {
+        return JSON.parse(trimmed)
+      } catch {
+        return data
+      }
+    }
+
+    return data
   }
 
   private isDebugEnabled(): boolean {

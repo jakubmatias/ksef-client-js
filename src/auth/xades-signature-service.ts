@@ -38,7 +38,6 @@ export async function signXmlWithXades(
       hash: 'SHA-256',
       transforms: [
         'enveloped',
-        'http://www.w3.org/2001/10/xml-exc-c14n#',
       ],
     },
   ]
@@ -46,9 +45,7 @@ export async function signXmlWithXades(
   await signedXml.Sign(signAlgorithm as any, signingKey, xmlDoc, {
     references,
     x509: [certBase64],
-    xades: {
-      signingCertificate: certBase64,
-    },
+    signingCertificate: certBase64,
   } as any)
 
   const signedXmlString = signedXml.toString()
